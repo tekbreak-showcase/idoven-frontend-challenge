@@ -1,0 +1,27 @@
+version: "3"
+services:
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+    image: node:18-alpine
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    volumes:
+      - ./dbdata:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      NEXT_TELEMETRY_DEBUG: 1
